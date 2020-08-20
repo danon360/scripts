@@ -1,0 +1,23 @@
+#!/bin/bash
+storage_file="/home/x/dmenu-shortcut-entries"
+if [ $# -eq 0 ]; then 
+
+	declare -A dictionary 
+	db=$(<$storage_file)
+
+	while IFS='|' read -r key value; do 
+	dictionary[$key]=$value
+	done < $storage_file
+	for key in "${!dictionary[@]}"; do
+       		db2+="${key}\n"	
+	done
+ 
+	ans=$(echo -e "$db2" | dmenu -i -p "$1")
+
+	#${dictionary[$ans]} 
+	nohup ${dictionary[$ans]} >/dev/null 2>&1 </dev/null &
+elif [ "$1" = "add" ]; then
+	printf "$2|$3\n" >> $storage_file
+
+fi
+exit 0
